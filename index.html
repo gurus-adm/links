@@ -37,389 +37,103 @@
     --card-shadow: 0 1px 4px rgba(0,0,0,0.1);
     --search-bg: rgba(0,0,0,0.04);
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-  }
+  /* HEADER */
+  header { padding: 48px 0 32px; text-align: center; }
+  .logo-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--tag-bg); border: 1px solid rgba(124,92,252,0.25); border-radius: 100px; padding: 6px 16px; margin-bottom: 20px; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--tag-text); letter-spacing: 0.08em; text-transform: uppercase; }
+  .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+  h1 { font-weight: 800; font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 12px; }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 420px; margin: 0 auto 28px; }
 
-  /* Subtle grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 0 20px 80px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ---- HEADER ---- */
-  header {
-    padding: 48px 0 32px;
-    text-align: center;
-    position: relative;
-  }
-
-  .logo-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--tag-bg);
-    border: 1px solid rgba(124,92,252,0.25);
-    border-radius: 100px;
-    padding: 6px 16px;
-    margin-bottom: 20px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--tag-text);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .logo-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent2);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(2rem, 6vw, 3rem);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 12px;
-  }
-
-  h1 span {
-    color: var(--accent);
-  }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.6;
-    max-width: 420px;
-    margin: 0 auto 28px;
-  }
-
-  /* ---- THEME TOGGLE ---- */
-  .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    cursor: pointer;
-    font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.2s, transform 0.2s;
-    z-index: 100;
-  }
+  /* THEME */
+  .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.2s; z-index: 100; }
   .theme-toggle:hover { border-color: var(--border-hover); transform: scale(1.08); }
 
-  /* ---- SOCIAL BUTTONS ---- */
-  .socials {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 36px;
-  }
-
-  .social-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 16px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: var(--bg2);
-    color: var(--muted);
-    text-decoration: none;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    transition: border-color 0.2s, color 0.2s, transform 0.15s;
-  }
-  .social-btn:hover {
-    border-color: var(--border-hover);
-    color: var(--text);
-    transform: translateY(-2px);
-  }
+  /* SOCIALS */
+  .socials { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .social-btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 12px; transition: border-color 0.2s, color 0.2s, transform 0.15s; }
+  .social-btn:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-2px); }
   .social-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-  /* ---- SEARCH ---- */
-  .search-wrap {
-    position: relative;
-    margin-bottom: 32px;
-  }
+  /* PALABRA SECTION */
+  .palabra-section { background: linear-gradient(135deg, rgba(37,211,102,0.07) 0%, rgba(124,92,252,0.07) 100%); border: 1px solid rgba(37,211,102,0.22); border-radius: 20px; padding: 28px 24px; margin-bottom: 36px; text-align: center; }
+  .palabra-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.25); border-radius: 100px; padding: 5px 14px; font-family: 'Space Mono', monospace; font-size: 10px; color: #25d366; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .palabra-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .palabra-highlight { color: #25d366; }
+  .palabra-section > p { color: var(--muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+  .palabra-search-wrap { position: relative; max-width: 360px; margin: 0 auto 14px; }
+  .palabra-search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #25d366; width: 18px; height: 18px; pointer-events: none; }
+  #palabra-search { width: 100%; background: var(--bg2); border: 1px solid rgba(37,211,102,0.28); border-radius: 12px; padding: 13px 14px 13px 44px; font-family: 'Syne', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  #palabra-search::placeholder { color: var(--muted); }
+  #palabra-search:focus { border-color: #25d366; box-shadow: 0 0 0 3px rgba(37,211,102,0.1); }
+  .palabra-card { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--bg2); border: 1px solid rgba(37,211,102,0.18); border-radius: 14px; text-decoration: none; color: var(--text); margin-bottom: 8px; transition: border-color 0.2s, transform 0.15s; text-align: left; }
+  .palabra-card:hover { border-color: #25d366; transform: translateX(4px); }
+  .palabra-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.18); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .palabra-card-body { flex: 1; }
+  .palabra-card-title { font-weight: 600; font-size: 15px; margin-bottom: 3px; }
+  .palabra-card-word { font-family: 'Space Mono', monospace; font-size: 11px; color: #25d366; text-transform: uppercase; letter-spacing: 0.08em; }
+  .palabra-arrow { color: #25d366; font-size: 18px; }
+  .palabra-empty { color: var(--muted); font-size: 13px; padding: 10px 0; }
+  .keywords-hint { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+  .kw-chip { padding: 5px 12px; border-radius: 100px; border: 1px solid rgba(37,211,102,0.2); background: rgba(37,211,102,0.05); color: #25d366; font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+  .kw-chip:hover { background: rgba(37,211,102,0.13); border-color: rgba(37,211,102,0.4); }
 
-  .search-wrap svg {
-    position: absolute;
-    left: 16px;
-    top: 50%; transform: translateY(-50%);
-    color: var(--muted);
-    width: 18px; height: 18px;
-    pointer-events: none;
-  }
-
-  #search {
-    width: 100%;
-    background: var(--search-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 48px 14px 46px;
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
+  /* SEARCH GENERAL */
+  .search-wrap { position: relative; margin-bottom: 32px; }
+  .search-wrap svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 18px; height: 18px; pointer-events: none; }
+  #search { width: 100%; background: var(--search-bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 48px 14px 46px; font-family: 'Syne', sans-serif; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
   #search::placeholder { color: var(--muted); }
-  #search:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(124,92,252,0.15);
-  }
+  #search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.15); }
+  .clear-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; display: none; line-height: 1; padding: 4px; }
 
-  .clear-btn {
-    position: absolute;
-    right: 14px;
-    top: 50%; transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 18px;
-    display: none;
-    line-height: 1;
-    padding: 4px;
-  }
-
-  /* ---- CATEGORY FILTER PILLS ---- */
-  .filter-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-
-  .pill {
-    padding: 6px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 600;
-  }
+  /* PILLS */
+  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .pill { padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
-  .pill.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  /* ---- SECTION HEADERS ---- */
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 32px 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  /* SECTION LABEL */
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 32px 0 12px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  /* ---- LINK CARDS ---- */
+  /* LINK CARDS */
   .links-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .link-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 18px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    text-decoration: none;
-    color: var(--text);
-    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: var(--card-shadow);
-  }
-  .link-card:hover {
-    border-color: var(--border-hover);
-    transform: translateX(4px);
-    box-shadow: 0 4px 16px rgba(124,92,252,0.1);
-  }
-
-  .card-icon {
-    width: 42px; height: 42px;
-    border-radius: 10px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
+  .link-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: var(--card-shadow); animation: fadeUp 0.35s ease both; }
+  .link-card:hover { border-color: var(--border-hover); transform: translateX(4px); box-shadow: 0 4px 16px rgba(124,92,252,0.1); }
+  .card-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
   .card-body { flex: 1; min-width: 0; }
-
-  .card-title {
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-desc {
-    font-size: 13px;
-    color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-tags {
-    display: flex;
-    gap: 5px;
-    margin-top: 6px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 100px;
-    background: var(--tag-bg);
-    color: var(--tag-text);
-    text-transform: lowercase;
-  }
-
-  .card-arrow {
-    color: var(--muted);
-    font-size: 18px;
-    flex-shrink: 0;
-    transition: color 0.2s, transform 0.2s;
-  }
+  .card-title { font-weight: 600; font-size: 15px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-desc { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-tags { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+  .tag { font-family: 'Space Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 100px; background: var(--tag-bg); color: var(--tag-text); }
+  .card-arrow { color: var(--muted); font-size: 18px; flex-shrink: 0; transition: color 0.2s, transform 0.2s; }
   .link-card:hover .card-arrow { color: var(--accent); transform: translateX(3px); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .link-card:nth-child(1){animation-delay:0.04s} .link-card:nth-child(2){animation-delay:0.08s} .link-card:nth-child(3){animation-delay:0.12s} .link-card:nth-child(4){animation-delay:0.16s} .link-card:nth-child(5){animation-delay:0.20s}
 
-  /* ---- GLOSSARY / GLOSARIO ---- */
+  /* GLOSSARY */
   .glossary-section { margin-top: 40px; }
+  .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
+  .glossary-btn { padding: 12px 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg2); color: var(--text); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .glossary-btn:hover, .glossary-btn.active { border-color: var(--accent); color: var(--accent); background: var(--tag-bg); }
 
-  .glossary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 10px;
-    margin-top: 12px;
-  }
-
-  .glossary-btn {
-    padding: 12px 10px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--bg2);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-  }
-  .glossary-btn:hover, .glossary-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--tag-bg);
-  }
-
-  /* ---- EMPTY STATE ---- */
-  .empty-state {
-    text-align: center;
-    padding: 48px 20px;
-    color: var(--muted);
-    display: none;
-  }
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); display: none; }
   .empty-state .big { font-size: 36px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; }
 
-  /* ---- FOOTER ---- */
-  footer {
-    margin-top: 60px;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    padding-bottom: 20px;
-  }
+  /* FOOTER */
+  footer { margin-top: 60px; text-align: center; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; padding-bottom: 20px; }
   footer a { color: var(--accent); text-decoration: none; }
+  mark { background: rgba(124,92,252,0.3); color: var(--text); border-radius: 3px; padding: 0 2px; }
 
-  /* ---- HIGHLIGHT ---- */
-  mark {
-    background: rgba(124,92,252,0.3);
-    color: var(--text);
-    border-radius: 3px;
-    padding: 0 2px;
-  }
-
-  /* ---- ANIMATIONS ---- */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .link-card { animation: fadeUp 0.35s ease both; }
-  .link-card:nth-child(1) { animation-delay: 0.04s; }
-  .link-card:nth-child(2) { animation-delay: 0.08s; }
-  .link-card:nth-child(3) { animation-delay: 0.12s; }
-  .link-card:nth-child(4) { animation-delay: 0.16s; }
-  .link-card:nth-child(5) { animation-delay: 0.20s; }
-  .link-card:nth-child(6) { animation-delay: 0.24s; }
-  .link-card:nth-child(7) { animation-delay: 0.28s; }
-  .link-card:nth-child(8) { animation-delay: 0.32s; }
-
-  @media (max-width: 480px) {
-    header { padding: 36px 0 24px; }
-    .glossary-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 480px) { header { padding: 36px 0 24px; } .glossary-grid { grid-template-columns: repeat(2, 1fr); } .palabra-section { padding: 22px 16px; } }
 </style>
 </head>
 <body>
@@ -429,43 +143,58 @@
 <div class="container">
 
   <header>
-    <div class="logo-badge">
-      <span class="logo-dot"></span>
-      iaboxtool.es
-    </div>
+    <div class="logo-badge"><span class="logo-dot"></span>iaboxtool.es</div>
     <h1>IA<span>Box</span>Tool</h1>
-    <p class="subtitle">Herramientas, recursos y comunidad sobre inteligencia artificial. Usa el buscador para encontrar lo que necesitas.</p>
+    <p class="subtitle">Busca la palabra que viste en mi vídeo y te llevo directamente al recurso.</p>
   </header>
 
-  <!-- SOCIAL BUTTONS -->
+  <!-- SOCIALS -->
   <div class="socials">
     <a href="https://iaboxtool.es" class="social-btn" target="_blank">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       Web
     </a>
-    <a href="https://wa.me/TUNUMERO" class="social-btn" target="_blank" id="whatsapp-link">
+    <a href="https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037" class="social-btn" target="_blank">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      WhatsApp
+      Canal WhatsApp
     </a>
-    <a href="https://tiktok.com/@TUUSUARIO" class="social-btn" target="_blank" id="tiktok-link">
+    <a href="https://www.tiktok.com/@iaboxtoolweb" class="social-btn" target="_blank">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.05a8.16 8.16 0 0 0 4.78 1.52V7.12a4.85 4.85 0 0 1-1.01-.43z"/></svg>
       TikTok
     </a>
-    <a href="https://facebook.com/TUUSUARIO" class="social-btn" target="_blank" id="facebook-link">
+    <a href="https://www.facebook.com/Iaboxtool/" class="social-btn" target="_blank">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       Facebook
     </a>
   </div>
 
-  <!-- SEARCH -->
+  <!-- SECCIÓN PRINCIPAL: BUSCA LA PALABRA -->
+  <div class="palabra-section">
+    <div class="palabra-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Canal de WhatsApp
+    </div>
+    <h2>Busca la <span class="palabra-highlight">palabra</span> del vídeo</h2>
+    <p>¿Te dije "busca [palabra] en el link de mi bio"? Escríbela aquí y te llevo directo al recurso.</p>
+
+    <div class="palabra-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="palabra-search" placeholder="Escribe la palabra clave..." autocomplete="off" oninput="buscarPalabra(this.value)">
+    </div>
+
+    <div id="palabra-results"></div>
+
+    <div class="keywords-hint" id="keywords-hint"></div>
+  </div>
+
+  <!-- SEARCH GENERAL -->
   <div class="search-wrap">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="search" placeholder="Busca: agentes, chatgpt, automatización..." autocomplete="off" oninput="handleSearch(this.value)">
+    <input type="text" id="search" placeholder="Busca recursos: agentes, chatgpt, n8n..." autocomplete="off" oninput="handleSearch(this.value)">
     <button class="clear-btn" id="clear-btn" onclick="clearSearch()">×</button>
   </div>
 
-  <!-- FILTER PILLS -->
-  <div class="filter-pills" id="pills">
+  <div class="filter-pills">
     <button class="pill active" data-cat="all" onclick="filterCat('all', this)">Todos</button>
     <button class="pill" data-cat="agentes" onclick="filterCat('agentes', this)">Agentes</button>
     <button class="pill" data-cat="herramientas" onclick="filterCat('herramientas', this)">Herramientas</button>
@@ -474,88 +203,95 @@
     <button class="pill" data-cat="prompts" onclick="filterCat('prompts', this)">Prompts</button>
   </div>
 
-  <!-- LINKS LIST -->
-  <div class="section-label" id="results-label">Recursos destacados</div>
+  <div class="section-label" id="results-label">Todos los recursos</div>
   <div class="links-list" id="links-list"></div>
-
   <div class="empty-state" id="empty-state">
     <div class="big">🔍</div>
     <p>No se encontraron resultados para "<strong id="empty-query"></strong>"</p>
   </div>
 
-  <!-- GLOSSARY -->
   <div class="glossary-section">
     <div class="section-label">Glosario rápido</div>
     <div class="glossary-grid" id="glossary-grid"></div>
-    <div id="glossary-def" style="margin-top:14px; padding:16px 18px; background:var(--bg2); border:1px solid var(--border); border-radius:14px; font-size:14px; line-height:1.7; display:none; color:var(--muted);"></div>
+    <div id="glossary-def" style="margin-top:14px;padding:16px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;font-size:14px;line-height:1.7;display:none;color:var(--muted);"></div>
   </div>
 
-  <footer>
-    <p>Hecho con IA · <a href="https://iaboxtool.es" target="_blank">iaboxtool.es</a> · 2025</p>
-  </footer>
-
+  <footer><p>Hecho con IA · <a href="https://iaboxtool.es" target="_blank">iaboxtool.es</a> · 2025</p></footer>
 </div>
 
 <script>
-// ============================================================
-// DATOS — EDITA AQUÍ TUS LINKS
-// ============================================================
+// ================================================================
+// 🟢 AÑADE AQUÍ CADA VEZ QUE SUBAS UN VÍDEO NUEVO
+// Copia uno de los bloques de abajo, pégalo al final de la lista
+// y cambia: palabra, titulo, desc, icon y url
+// ================================================================
+const PALABRAS = [
+  {
+    palabra: "agentes",
+    titulo: "Agentes de IA — Guía completa",
+    desc: "Todo lo que necesitas saber sobre agentes de IA",
+    icon: "🤖",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037"
+  },
+  {
+    palabra: "chatgpt",
+    titulo: "ChatGPT desde cero",
+    desc: "Cómo empezar a usar ChatGPT hoy mismo",
+    icon: "💡",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037"
+  },
+  {
+    palabra: "n8n",
+    titulo: "Automatización con n8n",
+    desc: "Flujos de trabajo automáticos sin código",
+    icon: "⚡",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037"
+  },
+  {
+    palabra: "prompts",
+    titulo: "Prompts que uso cada día",
+    desc: "Colección de prompts probados y optimizados",
+    icon: "✍️",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037"
+  }
+  // ← AQUI AÑADES MÁS. Copia el bloque de arriba, cambia los datos y añade una coma al anterior
+];
+
+// ================================================================
+// LINKS GENERALES (la sección de abajo del buscador)
+// ================================================================
 const LINKS = [
   {
     title: "Canal de WhatsApp",
-    desc: "Únete a la comunidad, novedades y recursos diarios",
+    desc: "Únete — recursos, herramientas y novedades de IA",
     icon: "💬",
-    url: "https://wa.me/TUNUMERO",   // ← CAMBIA ESTO
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037",
     cats: ["comunidad"],
-    tags: ["whatsapp", "comunidad", "grupo"]
+    tags: ["whatsapp", "comunidad", "canal"]
   },
   {
-    title: "Agentes de IA — Tutorial completo",
+    title: "Agentes de IA",
     desc: "Qué son, cómo funcionan y cómo usarlos hoy",
     icon: "🤖",
-    url: "https://iaboxtool.es/agentes",   // ← CAMBIA ESTO
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037",
     cats: ["agentes", "tutoriales"],
-    tags: ["agentes", "ia", "automatización", "tutorial"]
+    tags: ["agentes", "ia", "automatización"]
   },
   {
     title: "ChatGPT desde cero",
-    desc: "Guía práctica para empezar a usar ChatGPT",
+    desc: "Guía práctica para empezar con ChatGPT",
     icon: "💡",
-    url: "https://iaboxtool.es/chatgpt",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037",
     cats: ["tutoriales", "herramientas"],
-    tags: ["chatgpt", "openai", "tutorial", "prompts"]
+    tags: ["chatgpt", "openai", "tutorial"]
   },
   {
-    title: "Herramientas de IA gratuitas",
+    title: "Herramientas IA gratuitas",
     desc: "Lista actualizada de las mejores tools gratis",
     icon: "🛠️",
-    url: "https://iaboxtool.es/herramientas",
+    url: "https://iaboxtool.es",
     cats: ["herramientas"],
-    tags: ["herramientas", "gratis", "tools", "ia"]
-  },
-  {
-    title: "Prompts que uso cada día",
-    desc: "Colección de prompts probados y optimizados",
-    icon: "✍️",
-    url: "https://iaboxtool.es/prompts",
-    cats: ["prompts"],
-    tags: ["prompts", "chatgpt", "claude", "productividad"]
-  },
-  {
-    title: "Automatización con n8n",
-    desc: "Aprende a automatizar flujos sin código",
-    icon: "⚡",
-    url: "https://iaboxtool.es/n8n",
-    cats: ["herramientas", "tutoriales"],
-    tags: ["n8n", "automatización", "flujos", "agentes"]
-  },
-  {
-    title: "Claude vs ChatGPT: comparativa",
-    desc: "¿Cuál usar para cada caso? Análisis honesto",
-    icon: "⚖️",
-    url: "https://iaboxtool.es/comparativa",
-    cats: ["tutoriales"],
-    tags: ["claude", "chatgpt", "comparativa", "ia"]
+    tags: ["herramientas", "gratis", "tools"]
   },
   {
     title: "Web — IABoxTool.es",
@@ -563,71 +299,89 @@ const LINKS = [
     icon: "🌐",
     url: "https://iaboxtool.es",
     cats: ["comunidad"],
-    tags: ["web", "blog", "articulos", "recursos"]
+    tags: ["web", "blog", "articulos"]
   }
 ];
 
-// ============================================================
-// GLOSARIO — EDITA O AÑADE TÉRMINOS
-// ============================================================
+// ================================================================
+// GLOSARIO
+// ================================================================
 const GLOSSARY = {
-  "Agente IA": "Un agente de IA es un sistema que puede percibir su entorno, tomar decisiones y ejecutar acciones de forma autónoma para alcanzar un objetivo.",
-  "Prompt": "Instrucción o texto que le das a una IA para que genere una respuesta. Un buen prompt es claro, específico y con contexto.",
-  "LLM": "Large Language Model (Modelo de Lenguaje Grande). Es la tecnología detrás de ChatGPT, Claude, Gemini, etc.",
-  "RAG": "Retrieval-Augmented Generation: técnica que permite a una IA consultar documentos o bases de datos propias antes de responder.",
-  "n8n": "Herramienta de automatización de flujos de trabajo, de código abierto, muy popular para conectar APIs y crear agentes.",
-  "Token": "Unidad básica de texto que procesa una IA. Equivale aproximadamente a 3/4 de una palabra en español.",
-  "Fine-tuning": "Proceso de entrenar un modelo ya existente con datos propios para especializarlo en una tarea concreta.",
-  "API": "Interfaz que permite conectar tu app o herramienta directamente con un modelo de IA para automatizar tareas.",
-  "Vector DB": "Base de datos que almacena texto como vectores matemáticos, esencial para sistemas RAG y memoria en agentes.",
-  "Ollama": "Herramienta para correr modelos de IA en tu propio ordenador, sin mandar datos a la nube.",
-  "Claude": "Modelo de IA de Anthropic. Especialmente bueno para tareas complejas, análisis y código.",
-  "ChatGPT": "Asistente de IA de OpenAI. El más conocido. Disponible en versión gratuita y de pago (GPT-4)."
+  "Agente IA": "Sistema que puede percibir su entorno, tomar decisiones y ejecutar acciones de forma autónoma para alcanzar un objetivo.",
+  "Prompt": "Instrucción que le das a una IA. Un buen prompt es claro, específico y con contexto.",
+  "LLM": "Large Language Model. La tecnología detrás de ChatGPT, Claude, Gemini, etc.",
+  "RAG": "Retrieval-Augmented Generation: técnica para que una IA consulte documentos propios antes de responder.",
+  "n8n": "Herramienta de automatización de flujos de trabajo, de código abierto.",
+  "Token": "Unidad básica de texto que procesa una IA. Equivale a unos 3/4 de palabra en español.",
+  "Fine-tuning": "Entrenar un modelo ya existente con datos propios para especializarlo.",
+  "API": "Interfaz que conecta tu app directamente con un modelo de IA.",
+  "Ollama": "Herramienta para correr modelos de IA en tu ordenador sin mandar datos a la nube.",
+  "Claude": "Modelo de IA de Anthropic. Muy bueno para análisis y código.",
+  "ChatGPT": "Asistente de IA de OpenAI. El más conocido, disponible gratis y de pago."
 };
 
-// ============================================================
-// LÓGICA
-// ============================================================
-let currentCat = 'all';
-let currentSearch = '';
+// ================================================================
+// LÓGICA — no toques nada de aquí abajo
+// ================================================================
+let currentCat = 'all', currentSearch = '';
+
+function buscarPalabra(val) {
+  const q = val.toLowerCase().trim();
+  const results = document.getElementById('palabra-results');
+  if (!q) { results.innerHTML = ''; return; }
+  const matches = PALABRAS.filter(p => p.palabra.includes(q) || q.includes(p.palabra));
+  if (matches.length === 0) {
+    results.innerHTML = `<p class="palabra-empty">No encontré la palabra "<strong>${val}</strong>" — revisa que esté bien escrita o espera a que lo publique.</p>`;
+    return;
+  }
+  results.innerHTML = matches.map(p => `
+    <a class="palabra-card" href="${p.url}" target="_blank" rel="noopener">
+      <div class="palabra-icon">${p.icon}</div>
+      <div class="palabra-card-body">
+        <div class="palabra-card-title">${p.titulo}</div>
+        <div class="palabra-card-word">🔑 ${p.palabra}</div>
+      </div>
+      <span class="palabra-arrow">→</span>
+    </a>`).join('');
+}
+
+function renderKeywords() {
+  document.getElementById('keywords-hint').innerHTML = PALABRAS.map(p =>
+    `<button class="kw-chip" onclick="usarPalabra('${p.palabra}')">${p.palabra}</button>`
+  ).join('');
+}
+
+function usarPalabra(w) {
+  const inp = document.getElementById('palabra-search');
+  inp.value = w; buscarPalabra(w);
+  inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
 function renderLinks(items) {
   const list = document.getElementById('links-list');
   const empty = document.getElementById('empty-state');
   const label = document.getElementById('results-label');
-
   if (items.length === 0) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
+    list.innerHTML = ''; empty.style.display = 'block';
     document.getElementById('empty-query').textContent = currentSearch;
-    label.style.display = 'none';
-    return;
+    label.style.display = 'none'; return;
   }
-
-  empty.style.display = 'none';
-  label.style.display = 'flex';
-
+  empty.style.display = 'none'; label.style.display = 'flex';
   const q = currentSearch.toLowerCase();
-  list.innerHTML = items.map(link => {
-    const title = q ? highlight(link.title, q) : link.title;
-    const desc = q ? highlight(link.desc, q) : link.desc;
-    const tags = link.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    return `
-      <a class="link-card" href="${link.url}" target="_blank" rel="noopener">
-        <div class="card-icon">${link.icon}</div>
-        <div class="card-body">
-          <div class="card-title">${title}</div>
-          <div class="card-desc">${desc}</div>
-          <div class="card-tags">${tags}</div>
-        </div>
-        <span class="card-arrow">→</span>
-      </a>`;
-  }).join('');
+  list.innerHTML = items.map(link => `
+    <a class="link-card" href="${link.url}" target="_blank" rel="noopener">
+      <div class="card-icon">${link.icon}</div>
+      <div class="card-body">
+        <div class="card-title">${q ? highlight(link.title, q) : link.title}</div>
+        <div class="card-desc">${q ? highlight(link.desc, q) : link.desc}</div>
+        <div class="card-tags">${link.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>`).join('');
 }
 
 function highlight(text, q) {
-  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(re, '<mark>$1</mark>');
+  return text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
 }
 
 function filterLinks() {
@@ -635,11 +389,7 @@ function filterLinks() {
   return LINKS.filter(link => {
     const catMatch = currentCat === 'all' || link.cats.includes(currentCat);
     if (!q) return catMatch;
-    const textMatch =
-      link.title.toLowerCase().includes(q) ||
-      link.desc.toLowerCase().includes(q) ||
-      link.tags.some(t => t.includes(q));
-    return catMatch && textMatch;
+    return catMatch && (link.title.toLowerCase().includes(q) || link.desc.toLowerCase().includes(q) || link.tags.some(t => t.includes(q)));
   });
 }
 
@@ -649,10 +399,7 @@ function handleSearch(val) {
   renderLinks(filterLinks());
 }
 
-function clearSearch() {
-  document.getElementById('search').value = '';
-  handleSearch('');
-}
+function clearSearch() { document.getElementById('search').value = ''; handleSearch(''); }
 
 function filterCat(cat, btn) {
   currentCat = cat;
@@ -661,48 +408,33 @@ function filterCat(cat, btn) {
   renderLinks(filterLinks());
 }
 
-// ---- GLOSSARY ----
 function renderGlossary() {
-  const grid = document.getElementById('glossary-grid');
-  grid.innerHTML = Object.keys(GLOSSARY).map(term =>
-    `<button class="glossary-btn" onclick="showDef('${term}', this)">${term}</button>`
-  ).join('');
+  document.getElementById('glossary-grid').innerHTML = Object.keys(GLOSSARY).map(term =>
+    `<button class="glossary-btn" onclick="showDef('${term}', this)">${term}</button>`).join('');
 }
 
 function showDef(term, btn) {
   const box = document.getElementById('glossary-def');
-  const allBtns = document.querySelectorAll('.glossary-btn');
-  allBtns.forEach(b => b.classList.remove('active'));
-
-  if (box.style.display === 'block' && box.dataset.term === term) {
-    box.style.display = 'none';
-    return;
-  }
-
+  document.querySelectorAll('.glossary-btn').forEach(b => b.classList.remove('active'));
+  if (box.style.display === 'block' && box.dataset.term === term) { box.style.display = 'none'; return; }
   btn.classList.add('active');
   box.dataset.term = term;
   box.innerHTML = `<strong style="color:var(--text)">${term}</strong><br>${GLOSSARY[term]}`;
   box.style.display = 'block';
 }
 
-// ---- THEME ----
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.querySelector('.theme-toggle').textContent = isDark ? '🌙' : '☀️';
+  document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('theme', isDark ? 'light' : 'dark');
 }
 
-// ---- INIT ----
 (function init() {
   const saved = localStorage.getItem('theme');
-  if (saved) {
-    document.documentElement.setAttribute('data-theme', saved);
-    document.querySelector('.theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️';
-  }
-  renderLinks(LINKS);
-  renderGlossary();
+  if (saved) { document.documentElement.setAttribute('data-theme', saved); document.querySelector('.theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️'; }
+  renderLinks(LINKS); renderGlossary(); renderKeywords();
 })();
 </script>
 </body>
