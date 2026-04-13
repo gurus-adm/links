@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IABoxTool — Busca la palabra del vídeo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --bg2: #13131a; --bg3: #1c1c26;
+    --border: rgba(255,255,255,0.07); --border-hover: rgba(255,255,255,0.18);
+    --accent: #7c5cfc; --accent2: #00e5b0;
+    --text: #f0eff8; --muted: #8887a0;
+    --tag-bg: rgba(124,92,252,0.12); --tag-text: #a48cff;
+  }
+  [data-theme="light"] {
+    --bg: #f5f4fa; --bg2: #ffffff; --bg3: #ece9f8;
+    --border: rgba(0,0,0,0.08); --border-hover: rgba(0,0,0,0.2);
+    --accent: #6241f4; --accent2: #00a87d;
+    --text: #1a1826; --muted: #6b6882;
+    --tag-bg: rgba(98,65,244,0.08); --tag-text: #5533cc;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(124,92,252,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,252,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .container { max-width: 640px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+  header { padding: 48px 0 32px; text-align: center; }
+  .logo-img { width: 96px; height: 96px; border-radius: 22px; object-fit: cover; margin-bottom: 18px; box-shadow: 0 0 0 3px rgba(0,229,176,0.25), 0 8px 32px rgba(0,0,0,0.4); display: block; margin-left: auto; margin-right: auto; }
+  .logo-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--tag-bg); border: 1px solid rgba(124,92,252,0.25); border-radius: 100px; padding: 6px 16px; margin-bottom: 20px; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--tag-text); letter-spacing: 0.08em; text-transform: uppercase; }
+  .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  h1 { font-weight: 800; font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 12px; }
+  h1 span { color: var(--accent); }
+  .subtitle { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 400px; margin: 0 auto 28px; }
+
+  .theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, transform 0.2s; z-index: 100; }
+  .theme-toggle:hover { border-color: var(--border-hover); transform: scale(1.08); }
+
+  .socials { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+  .social-btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 12px; transition: border-color 0.2s, color 0.2s, transform 0.15s; }
+  .social-btn:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-2px); }
+  .social-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .palabra-section { background: linear-gradient(135deg, rgba(37,211,102,0.07) 0%, rgba(124,92,252,0.07) 100%); border: 1px solid rgba(37,211,102,0.22); border-radius: 20px; padding: 28px 24px; margin-bottom: 48px; text-align: center; }
+  .palabra-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.25); border-radius: 100px; padding: 5px 14px; font-family: 'Space Mono', monospace; font-size: 10px; color: #25d366; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .palabra-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .palabra-highlight { color: #25d366; }
+  .palabra-section > p { color: var(--muted); font-size: 14px; margin-bottom: 22px; line-height: 1.6; }
+  .palabra-search-wrap { position: relative; max-width: 380px; margin: 0 auto 14px; }
+  .palabra-search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #25d366; width: 18px; height: 18px; pointer-events: none; }
+  #palabra-search { width: 100%; background: var(--bg2); border: 1px solid rgba(37,211,102,0.28); border-radius: 12px; padding: 14px 14px 14px 44px; font-family: 'Syne', sans-serif; font-size: 16px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  #palabra-search::placeholder { color: var(--muted); }
+  #palabra-search:focus { border-color: #25d366; box-shadow: 0 0 0 3px rgba(37,211,102,0.1); }
+  #palabra-results { text-align: left; }
+  .palabra-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--bg2); border: 1px solid rgba(37,211,102,0.18); border-radius: 14px; text-decoration: none; color: var(--text); margin-bottom: 8px; transition: border-color 0.2s, transform 0.15s; }
+  .palabra-card:hover { border-color: #25d366; transform: translateX(4px); }
+  .palabra-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.18); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .palabra-card-title { font-weight: 700; font-size: 17px; }
+  .palabra-arrow { color: #25d366; font-size: 20px; margin-left: auto; flex-shrink: 0; }
+  .palabra-empty { color: var(--muted); font-size: 13px; padding: 10px 0; text-align: center; }
+  .keywords-hint { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+  .kw-chip { padding: 5px 14px; border-radius: 100px; border: 1px solid rgba(37,211,102,0.2); background: rgba(37,211,102,0.05); color: #25d366; font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+  .kw-chip:hover { background: rgba(37,211,102,0.13); border-color: rgba(37,211,102,0.4); }
+
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
+  .glossary-btn { padding: 12px 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg2); color: var(--text); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .glossary-btn:hover, .glossary-btn.active { border-color: var(--accent); color: var(--accent); background: var(--tag-bg); }
+  #glossary-def { margin-top: 14px; padding: 16px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; font-size: 14px; line-height: 1.7; display: none; color: var(--muted); }
+
+  footer { margin-top: 60px; text-align: center; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; padding-bottom: 20px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 480px) { header { padding: 36px 0 24px; } .glossary-grid { grid-template-columns: repeat(2, 1fr); } .palabra-section { padding: 22px 16px; } }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+
+<div class="container">
+
+  <header>
+    <img src="iaboxtool.jpg" alt="IABoxTool logo" class="logo-img">
+    <div class="logo-badge"><span class="logo-dot"></span>iaboxtool.es</div>
+    <h1>IA<span>Box</span>Tool</h1>
+    <p class="subtitle">Escribe la palabra que viste en el vídeo y te llevo directo al recurso.</p>
+  </header>
+
+  <div class="socials">
+    <a href="https://iaboxtool.es" class="social-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Web
+    </a>
+    <a href="https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037" class="social-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Canal WhatsApp
+    </a>
+    <a href="https://www.tiktok.com/@iaboxtoolweb" class="social-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.05a8.16 8.16 0 0 0 4.78 1.52V7.12a4.85 4.85 0 0 1-1.01-.43z"/></svg>
+      TikTok
+    </a>
+    <a href="https://www.facebook.com/Iaboxtool/" class="social-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      Facebook
+    </a>
+  </div>
+
+  <div class="palabra-section">
+    <div class="palabra-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Palabra del vídeo
+    </div>
+    <h2>Busca la <span class="palabra-highlight">palabra</span> del vídeo</h2>
+    <p>¿Te dije "busca [palabra] en el link de mi bio"? Escríbela aquí.</p>
+
+    <div class="palabra-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="palabra-search" placeholder="ej: agentes, video, herramienta..." autocomplete="off" oninput="buscarPalabra(this.value)">
+    </div>
+
+    <div id="palabra-results"></div>
+    <div class="keywords-hint" id="keywords-hint"></div>
+  </div>
+
+  <div class="glossary-section">
+    <div class="section-label">Glosario de términos</div>
+    <div class="glossary-grid" id="glossary-grid"></div>
+    <div id="glossary-def"></div>
+  </div>
+
+  <footer><p>IABoxTool · <a href="https://iaboxtool.es" target="_blank">iaboxtool.es</a></p></footer>
+</div>
+
+<script>
+// ================================================================
+// 🟢 AÑADE AQUÍ UNA ENTRADA POR CADA VÍDEO
+// Solo 3 cosas: la palabra exacta que dices en el vídeo, el emoji, y el enlace
+// El título que ve el usuario ES la palabra — sin inventar nada más
+// ================================================================
+const PALABRAS = [
+  {
+    palabra: "Agentes",
+    icon: "🤖",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037/198"
+  },
+  {
+    palabra: "Video",
+    icon: "🎬",
+    url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037/210"
+  },
+  {
+    palabra: "Herramienta",
+    icon: "🛠️",
+    url: "https://www.whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037/188"
+  },
+  {
+    palabra: "Github",
+    icon: "🐙",
+    url: "https://github.com/public-apis/public-apis"
+  }
+  // ← AÑADE MÁS AQUÍ. Ejemplo:
+  // ,{
+  //   palabra: "Claude",
+  //   icon: "🧠",
+  //   url: "https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037/999"
+  // }
+];
+
+// ================================================================
+// GLOSARIO
+// ================================================================
+const GLOSSARY = {
+  "Agente IA": "Sistema que puede percibir su entorno, tomar decisiones y ejecutar acciones de forma autónoma para alcanzar un objetivo.",
+  "Prompt": "Instrucción que le das a una IA. Un buen prompt es claro, específico y con contexto.",
+  "LLM": "Large Language Model. La tecnología detrás de ChatGPT, Claude, Gemini, etc.",
+  "RAG": "Técnica para que una IA consulte documentos propios antes de responder.",
+  "n8n": "Herramienta de automatización de flujos de trabajo, de código abierto.",
+  "Token": "Unidad básica de texto que procesa una IA. Equivale a unos 3/4 de palabra en español.",
+  "API": "Interfaz que conecta una aplicación con un modelo de IA u otro servicio.",
+  "Ollama": "Herramienta para correr modelos de IA en tu ordenador sin mandar datos a la nube.",
+  "Claude": "Modelo de IA de Anthropic. Muy bueno para análisis, redacción y código.",
+  "ChatGPT": "Asistente de IA de OpenAI. El más conocido, disponible gratis y de pago."
+};
+
+// ================================================================
+// LÓGICA
+// ================================================================
+function buscarPalabra(val) {
+  const q = val.toLowerCase().trim();
+  const results = document.getElementById('palabra-results');
+  if (!q) { results.innerHTML = ''; return; }
+  const matches = PALABRAS.filter(p => p.palabra.toLowerCase().includes(q) || q.includes(p.palabra.toLowerCase()));
+  if (matches.length === 0) {
+    results.innerHTML = `
+      <div style="text-align:center; padding: 10px 0 4px;">
+        <p style="color:var(--muted); font-size:13px; margin-bottom:14px;">
+          Aún no tengo "<strong style="color:var(--text)">${val}</strong>" — puede que aún no lo haya publicado.<br>
+          Únete al canal y no te pierdas nada 👇
+        </p>
+        <a href="https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037" target="_blank" rel="noopener"
+          style="display:inline-flex; align-items:center; gap:10px; padding:14px 22px; background:#25d366; border-radius:12px; text-decoration:none; color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:15px; transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Unirme al canal de WhatsApp
+        </a>
+      </div>`;
+    return;
+  }
+  results.innerHTML = matches.map(p => `
+    <a class="palabra-card" href="${p.url}" target="_blank" rel="noopener">
+      <div class="palabra-icon">${p.icon}</div>
+      <div class="palabra-card-title">${p.palabra}</div>
+      <span class="palabra-arrow">→</span>
+    </a>`).join('');
+}
+
+function renderKeywords() {
+  document.getElementById('keywords-hint').innerHTML = PALABRAS.map(p =>
+    `<button class="kw-chip" onclick="usarPalabra('${p.palabra}')">${p.palabra}</button>`
+  ).join('');
+}
+
+function usarPalabra(w) {
+  const inp = document.getElementById('palabra-search');
+  inp.value = w; buscarPalabra(w);
+  inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderGlossary() {
+  document.getElementById('glossary-grid').innerHTML = Object.keys(GLOSSARY).map(term =>
+    `<button class="glossary-btn" onclick="showDef('${term}', this)">${term}</button>`).join('');
+}
+
+function showDef(term, btn) {
+  const box = document.getElementById('glossary-def');
+  document.querySelectorAll('.glossary-btn').forEach(b => b.classList.remove('active'));
+  if (box.style.display === 'block' && box.dataset.term === term) { box.style.display = 'none'; return; }
+  btn.classList.add('active');
+  box.dataset.term = term;
+  box.innerHTML = `<strong style="color:var(--text)">${term}</strong><br>${GLOSSARY[term]}`;
+  box.style.display = 'block';
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelector('.theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+
+(function init() {
+  const saved = localStorage.getItem('theme');
+  if (saved) { document.documentElement.setAttribute('data-theme', saved); document.querySelector('.theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️'; }
+  renderGlossary();
+  renderKeywords();
+})();
+</script>
+</body>
+</html>
