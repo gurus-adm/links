@@ -27,6 +27,7 @@
   .container { max-width: 640px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
 
   header { padding: 48px 0 32px; text-align: center; }
+  .logo-img { width: 96px; height: 96px; border-radius: 22px; object-fit: cover; margin-bottom: 18px; box-shadow: 0 0 0 3px rgba(0,229,176,0.25), 0 8px 32px rgba(0,0,0,0.4); display: block; margin-left: auto; margin-right: auto; }
   .logo-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--tag-bg); border: 1px solid rgba(124,92,252,0.25); border-radius: 100px; padding: 6px 16px; margin-bottom: 20px; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--tag-text); letter-spacing: 0.08em; text-transform: uppercase; }
   .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
@@ -82,6 +83,7 @@
 <div class="container">
 
   <header>
+    <img src="iaboxtool.jpg" alt="IABoxTool logo" class="logo-img">
     <div class="logo-badge"><span class="logo-dot"></span>iaboxtool.es</div>
     <h1>IA<span>Box</span>Tool</h1>
     <p class="subtitle">Escribe la palabra que viste en el vídeo y te llevo directo al recurso.</p>
@@ -192,7 +194,19 @@ function buscarPalabra(val) {
   if (!q) { results.innerHTML = ''; return; }
   const matches = PALABRAS.filter(p => p.palabra.toLowerCase().includes(q) || q.includes(p.palabra.toLowerCase()));
   if (matches.length === 0) {
-    results.innerHTML = `<p class="palabra-empty">No encontré "<strong>${val}</strong>" — revisa que esté bien escrita o espera a que lo publique.</p>`;
+    results.innerHTML = `
+      <div style="text-align:center; padding: 10px 0 4px;">
+        <p style="color:var(--muted); font-size:13px; margin-bottom:14px;">
+          Aún no tengo "<strong style="color:var(--text)">${val}</strong>" — puede que aún no lo haya publicado.<br>
+          Únete al canal y no te pierdas nada 👇
+        </p>
+        <a href="https://whatsapp.com/channel/0029Vb7TdpI7oQhaIvD7W037" target="_blank" rel="noopener"
+          style="display:inline-flex; align-items:center; gap:10px; padding:14px 22px; background:#25d366; border-radius:12px; text-decoration:none; color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:15px; transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.1.547 4.07 1.504 5.783L0 24l6.395-1.677A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.507-5.17-1.392l-.37-.22-3.797.996 1.012-3.7-.24-.382A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Unirme al canal de WhatsApp
+        </a>
+      </div>`;
     return;
   }
   results.innerHTML = matches.map(p => `
